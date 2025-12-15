@@ -7,7 +7,7 @@ spec:
   generators:
   - git:
       repoURL: https://github.com/zhweiliu/rag_infrastructure.git
-      revision: main
+      revision: master
       directories:
       - path: argocd/clusters/apps/*
   template:
@@ -17,7 +17,7 @@ spec:
       project: "default"
       source:
         repoURL: https://github.com/zhweiliu/rag_infrastructure.git
-        targetRevision: main
+        targetRevision: master
         path: argocd/clusters/apps/{{path.basename}}
       destination:
         server: https://kubernetes.default.svc
