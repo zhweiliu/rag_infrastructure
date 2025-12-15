@@ -23,16 +23,17 @@ CREATE TYPE order_status AS ENUM ('PENDING', 'PAID', 'SHIPPED', 'CANCELLED', 'RE
 5. User
 ```sql
 CREATE TABLE users (
-	user_id SERIAL PRIMARY KEY,                        	-- 自動遞增
+	id SERIAL PRIMARY KEY,                        	-- 自動遞增
 	display_name VARCHAR(20) NOT null,                 	-- user display name
 	email VARCHAR(100) NOT NULL UNIQUE					-- Email
 );
+
 ```
 
 6. 商鋪資訊 (Stores)
 ```sql
 create table stores (
-	store_id SERIAL PRIMARY KEY,                        -- 自動遞增
+	id SERIAL PRIMARY KEY,                        -- 自動遞增
 	name VARCHAR(50) NOT NULL unique,                   -- 店鋪名稱
 	description text,				                    -- 店鋪描述
 	country VARCHAR(50) NOT NULL	                    -- 國家
@@ -42,10 +43,10 @@ create table stores (
 7. 商品資訊 (Products)
 ```sql
 CREATE TABLE products (
-	product_id SERIAL PRIMARY KEY,                         -- 自動遞增
+	id SERIAL PRIMARY KEY,                         -- 自動遞增
 	name VARCHAR(50) NOT NULL unique,                      -- 產品名稱
 	description text,				                       -- 產品描述
-	store_id INTEGER NOT NULL references stores(store_id), --外鍵：連結至商店資訊
+	store_id INTEGER NOT NULL references stores(id), --外鍵：連結至商店資訊
 	sku VARCHAR(50) NOT NULL                               -- 商品 SKU)
 );
 ```
@@ -53,22 +54,23 @@ CREATE TABLE products (
 8. 訂單表頭 (Orders)
 ```sql
 CREATE TABLE orders (
-    order_id SERIAL PRIMARY KEY,                        -- 自動遞增
+    id SERIAL PRIMARY KEY,                        -- 自動遞增
     order_no VARCHAR(20) NOT NULL UNIQUE,               -- 訂單編號
     order_date DATE NOT NULL,                           -- 訂單日期
-    user_id INTEGER NOT NULL references users(user_id), -- 客戶名稱
+    user_id INTEGER NOT NULL references users(id), -- 客戶名稱
     total_amount NUMERIC(10, 2) NOT NULL,               -- 訂單總金額
     status order_status NOT NULL,                       -- 使用 ENUM 類型
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
 );
+
 ```
 9. 訂單明細 (Order Details)
 ```sql
 CREATE TABLE order_details (
-    detail_id SERIAL PRIMARY KEY,                          			-- 自動遞增
-    order_id INTEGER NOT NULL REFERENCES orders(order_id), 			-- 外鍵：連結至訂單表頭
-    product_id INTEGER NOT NULL references products(product_id),	-- 外鍵：連結至商品資訊
+    id SERIAL PRIMARY KEY,                          			-- 自動遞增
+    order_id INTEGER NOT NULL REFERENCES orders(id), 			-- 外鍵：連結至訂單表頭
+    product_id INTEGER NOT NULL references products(id),	-- 外鍵：連結至商品資訊
     product_name_snapshot VARCHAR(50) NOT NULL,						-- sanpshot product name
     sku_snapshot VARCHAR(50) NOT NULL,								-- snapshot sku
     quantity INTEGER NOT NULL,                          			-- 數量
